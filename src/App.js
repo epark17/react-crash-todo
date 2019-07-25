@@ -5,28 +5,25 @@ import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import About from './components/pages/About';
 import uuid from 'uuid';
+import axios from 'axios';
 import './App.css';
 
 class App extends Component {
   state = {
-    todos: [
-      {
-        id: uuid.v4(),
-        title: 'Take out the trash',
-        completed: false,
-      },
-      {
-        id: uuid.v4(),
-        title: 'Dinner with friends',
-        completed: false,
-      },
-      {
-        id: uuid.v4(),
-        title: 'Meeting with client',
-        completed: false,
-      },
-    ],
+    todos: [],
   };
+
+  // Lifecycle
+  async componentDidMount() {
+    const res = await axios.get(
+      'http://jsonplaceholder.typicode.com/todos?_limit=10'
+    );
+    const data = await res.data;
+    // console.log(data);
+    this.setState({
+      todos: data,
+    });
+  }
 
   // adding Event (toggle complete)
   // passing down markComplete as props to Todos.js
