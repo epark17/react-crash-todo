@@ -16,10 +16,9 @@ class App extends Component {
   // Lifecycle
   async componentDidMount() {
     try {
-      const res = await axios.get(
+      const { data } = await axios.get(
         'http://jsonplaceholder.typicode.com/todos?_limit=10'
       );
-      const data = await res.data;
       this.setState({
         todos: data,
       });
@@ -53,26 +52,29 @@ class App extends Component {
   };
 
   // // adding Event (add todo)
-  // addTodo = title => {
-  //   axios
-  //     .post('http://jsonplaceholder.typicode.com/todos', {
-  //       title,
-  //       completed: false,
-  //     })
-  //     .then(res =>
-  //       this.setState({
-  //         todos: [...this.state.todos, res.data],
-  //       })
-  //     )
-  //     .catch(err => console.error(err));
-  // };
+  /*
+  // addTodo using promise chaining
+  addTodo = title => {
+    axios
+      .post('http://jsonplaceholder.typicode.com/todos', {
+        title,
+        completed: false,
+      })
+      .then(res =>
+        this.setState({
+          todos: [...this.state.todos, res.data],
+        })
+      )
+      .catch(err => console.error(err));
+  };
+  */
+
   addTodo = async title => {
     try {
-      const res = await axios.post(
+      const { data } = await axios.post(
         'http://jsonplaceholder.typicode.com/todos',
         { title, completed: false }
       );
-      const data = res.data;
       this.setState({
         todos: [...this.state.todos, data],
       });
