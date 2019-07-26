@@ -4,7 +4,7 @@ import Header from './components/layout/Header';
 import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import About from './components/pages/About';
-import uuid from 'uuid';
+// import uuid from 'uuid';
 import axios from 'axios';
 import './App.css';
 
@@ -15,14 +15,17 @@ class App extends Component {
 
   // Lifecycle
   async componentDidMount() {
-    const res = await axios.get(
-      'http://jsonplaceholder.typicode.com/todos?_limit=10'
-    );
-    const data = await res.data;
-    // console.log(data);
-    this.setState({
-      todos: data,
-    });
+    try {
+      const res = await axios.get(
+        'http://jsonplaceholder.typicode.com/todos?_limit=10'
+      );
+      const data = await res.data;
+      this.setState({
+        todos: data,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   // adding Event (toggle complete)
@@ -40,23 +43,42 @@ class App extends Component {
   };
 
   // adding Event (delete todo)
+  // Q: how can i use async await and try/catch here?
   delTodo = id => {
-    this.setState({
-      todos: [...this.state.todos.filter(todo => todo.id !== id)],
-    });
+    axios.delete(`http://jsonplaceholder.typicode.com/todos/${id}`).then(res =>
+      this.setState({
+        todos: [...this.state.todos.filter(todo => todo.id !== id)],
+      })
+    );
   };
 
-  // adding Event (add todo)
-  addTodo = title => {
-    const newTodo = {
-      id: uuid.v4(),
-      title,
-      completed: false,
-    };
-
-    this.setState({
-      todos: [...this.state.todos, newTodo],
-    });
+  // // adding Event (add todo)
+  // addTodo = title => {
+  //   axios
+  //     .post('http://jsonplaceholder.typicode.com/todos', {
+  //       title,
+  //       completed: false,
+  //     })
+  //     .then(res =>
+  //       this.setState({
+  //         todos: [...this.state.todos, res.data],
+  //       })
+  //     )
+  //     .catch(err => console.error(err));
+  // };
+  addTodo = async title => {
+    try {
+      const res = await axios.post(
+        'http://jsonplaceholder.typicode.com/todos',
+        { title, completed: false }
+      );
+      const data = res.data;
+      this.setState({
+        todos: [...this.state.todos, data],
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   render() {
