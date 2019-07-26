@@ -27,7 +27,7 @@ class App extends Component {
     }
   }
 
-  // adding Event (toggle complete)
+  // // adding Event (toggle complete)
   // passing down markComplete as props to Todos.js
   // Todos component passes down markComplete as props to TodoItem.js
   markComplete = id => {
