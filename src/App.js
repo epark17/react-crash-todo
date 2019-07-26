@@ -41,14 +41,29 @@ class App extends Component {
     });
   };
 
-  // adding Event (delete todo)
-  // Q: how can i use async await and try/catch here?
+  // // adding Event (delete todo)
+  /*
+  // delTodo using promise chaining
   delTodo = id => {
-    axios.delete(`http://jsonplaceholder.typicode.com/todos/${id}`).then(res =>
+    axios
+      .delete(`http://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(res =>
+        this.setState({
+          todos: [...this.state.todos.filter(todo => todo.id !== id)],
+        })
+      )
+      .catch(err => console.error(err));
+  };
+  */
+  delTodo = async id => {
+    try {
+      axios.delete(`http://jsonplaceholder.typicode.com/todos/${id}`);
       this.setState({
         todos: [...this.state.todos.filter(todo => todo.id !== id)],
-      })
-    );
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // // adding Event (add todo)
@@ -68,7 +83,6 @@ class App extends Component {
       .catch(err => console.error(err));
   };
   */
-
   addTodo = async title => {
     try {
       const { data } = await axios.post(
